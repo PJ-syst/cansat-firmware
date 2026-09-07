@@ -1,0 +1,9 @@
+/build/
+/sdkconfig
+/sdkconfig.old
+/tools/
+/host_tests/*.exe
+__pycache__/
+*.py[cod]
+.venv/
+telemetry-*.csv

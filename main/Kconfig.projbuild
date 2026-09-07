@@ -1,0 +1,155 @@
+menu "CanSat firmware"
+
+config CANSAT_TEAM_ID
+    string "Team identifier"
+    default "CHANGE_ME"
+
+config CANSAT_SENSOR_PERIOD_MS
+    int "Sensor sampling period (ms)"
+    range 20 1000
+    default 100
+
+menu "Flight-state validation"
+config CANSAT_LAUNCH_THRESHOLD_CM
+    int "Launch threshold above ground (cm)"
+    range 100 10000
+    default 1000
+
+config CANSAT_DESCENT_MARGIN_CM
+    int "Minimum downward trend per window (cm)"
+    range 10 5000
+    default 150
+
+config CANSAT_LANDING_BAND_CM
+    int "Landing stability band (cm)"
+    range 10 1000
+    default 200
+
+config CANSAT_LANDING_MAX_STEP_CM
+    int "Maximum landing sample-to-sample movement (cm)"
+    range 1 500
+    default 25
+
+config CANSAT_LANDING_MAX_HEIGHT_CM
+    int "Maximum relative altitude eligible for landing (cm)"
+    range 50 5000
+    default 500
+endmenu
+
+menu "I2C sensors"
+config CANSAT_I2C_SDA
+    int "I2C SDA GPIO"
+    range 0 39
+    default 21
+
+config CANSAT_I2C_SCL
+    int "I2C SCL GPIO"
+    range 0 39
+    default 22
+
+config CANSAT_I2C_FREQUENCY_HZ
+    int "I2C frequency"
+    range 10000 400000
+    default 400000
+
+config CANSAT_BAROMETER_ADDRESS
+    hex "BMP280/BME280 I2C address"
+    range 0x08 0x77
+    default 0x76
+
+config CANSAT_MPU6050_ADDRESS
+    hex "MPU6050 I2C address"
+    range 0x08 0x77
+    default 0x68
+endmenu
+
+menu "GPS UART"
+config CANSAT_GPS_UART_NUM
+    int "UART number"
+    range 0 2
+    default 1
+
+config CANSAT_GPS_RX_GPIO
+    int "GPS RX GPIO"
+    range 0 39
+    default 26
+
+config CANSAT_GPS_TX_GPIO
+    int "GPS TX GPIO"
+    range 0 33
+    default 27
+
+config CANSAT_GPS_BAUD
+    int "GPS baud rate"
+    default 9600
+endmenu
+
+menu "Radio UART"
+config CANSAT_RADIO_UART_NUM
+    int "UART number"
+    range 0 2
+    default 2
+
+config CANSAT_RADIO_RX_GPIO
+    int "Radio RX GPIO"
+    range 0 39
+    default 16
+
+config CANSAT_RADIO_TX_GPIO
+    int "Radio TX GPIO"
+    range 0 33
+    default 17
+
+config CANSAT_RADIO_BAUD
+    int "Radio baud rate"
+    default 9600
+endmenu
+
+menu "Battery monitor"
+config CANSAT_BATTERY_ENABLE
+    bool "Enable ADC battery voltage input"
+    default n
+
+config CANSAT_BATTERY_ADC_CHANNEL
+    int "ADC1 channel number"
+    range 0 7
+    default 6
+    depends on CANSAT_BATTERY_ENABLE
+
+config CANSAT_BATTERY_DIVIDER_RATIO_MILLI
+    int "Voltage divider ratio x1000"
+    range 1000 20000
+    default 2000
+    depends on CANSAT_BATTERY_ENABLE
+endmenu
+
+menu "Mechanism safety"
+config CANSAT_MECHANISM_ENABLE
+    bool "Enable mechanism GPIO output"
+    default n
+
+config CANSAT_MECHANISM_GPIO
+    int "Mechanism GPIO"
+    range 0 33
+    default 25
+    depends on CANSAT_MECHANISM_ENABLE
+
+config CANSAT_MECHANISM_ACTIVE_HIGH
+    bool "Mechanism output is active high"
+    default y
+    depends on CANSAT_MECHANISM_ENABLE
+
+config CANSAT_MECHANISM_FIRE_MS
+    int "Maximum fire duration (ms)"
+    range 50 5000
+    default 500
+    depends on CANSAT_MECHANISM_ENABLE
+
+config CANSAT_ALLOW_BENCH_MEC
+    bool "Allow MEC command outside DESCENT (bench only)"
+    default n
+    depends on CANSAT_MECHANISM_ENABLE
+endmenu
+
+endmenu
+

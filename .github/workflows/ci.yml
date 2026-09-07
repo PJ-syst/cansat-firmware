@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  host-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test host-side C logic
+        shell: pwsh
+        run: ./host_tests/run_tests.ps1
+      - name: Test ground station
+        run: python -m unittest ground_station.test_ground_station
+
+  firmware-build:
+    runs-on: ubuntu-latest
+    container: espressif/idf:v6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build ESP32 firmware
+        run: idf.py set-target esp32 build
